@@ -223,7 +223,7 @@ const BarChartVisas = () => {
   }, sortingMethod: string) => {
     const { continentCounts, totalVisaCount } = data;
     
-    let sortedContinents = Object.keys(continentCounts);
+    const sortedContinents = Object.keys(continentCounts);
     
     // Apply sorting based on selected method
     switch(sortingMethod) {
