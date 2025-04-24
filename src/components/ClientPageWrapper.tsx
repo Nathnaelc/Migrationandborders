@@ -5,14 +5,14 @@ import dynamic from "next/dynamic";
 // Client-side dynamic imports
 const NomadMap = dynamic(() => import("./NomadMap"), { ssr: false });
 const LineChart = dynamic(() => import("./LineChart"), { ssr: false });
-const RadarChart = dynamic(() => import("./RadarChart"), { ssr: false });
+const BarChartVisas = dynamic(() => import("./BarChartVisas"), { ssr: false });
 const BarChart = dynamic(() => import("./BarChart"), { ssr: false });
 
 export default function ClientPageWrapper() {
   return (
     <>
       {/* World Map Visualization */}
-        <section className="mb-12">
+      <section className="mb-12">
         <div className="relative h-[850px] w-full border rounded-lg overflow-hidden p-6">
             <h2 className="text-2xl text-black font-semibold mb-4">
             Digital Nomad Destinations
@@ -27,8 +27,19 @@ export default function ClientPageWrapper() {
             <NomadMap />
             </div>
         </div>
-        </section>
+      </section>
 
+      {/* Nomad Visa Programs by Continent */}
+      <section className="mb-12">
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-2xl font-semibold mb-4">Global Distribution of Nomad-Visa Programs</h2>
+          <p className="mb-4 text-gray-600">
+            This visualization reveals how digital nomad visa programs are distributed globally by continent. 
+            The data highlights significant disparities in mobility options between the Global North and South.
+          </p>
+          <BarChartVisas />
+        </div>
+      </section>
 
       {/* City Metrics Comparison
       <section className="mb-12">
@@ -50,18 +61,6 @@ export default function ClientPageWrapper() {
             affordable options among the most desirable cities.
           </p>
           <BarChart />
-        </div>
-      </section> */}
-
-      {/* Radar Chart for City Comparison
-      <section className="mb-12">
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-semibold mb-4">Multi-Factor City Comparison</h2>
-          <p className="mb-4 text-gray-600">
-            Select cities to compare across multiple factors. This radar chart visualization allows you to see strengths 
-            and weaknesses of each location across important digital nomad metrics.
-          </p>
-          <RadarChart />
         </div>
       </section> */}
     </>
