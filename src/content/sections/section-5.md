@@ -2,7 +2,7 @@
 title: "Who Are Migrant Gig Workers? Two Distinct Realities"
 id: "section-5"
 order: 5
-insertComponentAfter: "LineChart"
+insertComponentAfter: "BarChart"
 ---
 
 

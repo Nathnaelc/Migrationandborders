@@ -15,7 +15,7 @@ import {
 } from 'chart.js';
 import cities from '../data/processedNomadData';
 
-// Register only the components needed for Bar charts
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -27,7 +27,6 @@ ChartJS.register(
 );
 
 const BarChart = () => {
-  // Add client-side rendering logic
   const [isClient, setIsClient] = useState(false);
   
   useEffect(() => {
@@ -128,7 +127,7 @@ const BarChart = () => {
     },
   };
 
-  // Show loading state on server or during hydration
+
   if (!isClient) {
     return (
       <div className="bg-white p-6 rounded-lg shadow-md mt-8 h-[400px] flex items-center justify-center">

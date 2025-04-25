@@ -1,30 +1,27 @@
 'use client';
 
 import React, { useEffect, useState, useMemo } from 'react';
+import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   BarElement,
+  BarController,
+  PointElement,
   Title,
   Tooltip,
-  Legend,
-  LineElement,
-  PointElement,
-  BarController
+  Legend
 } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
 import Papa from 'papaparse';
 import { motion } from 'framer-motion';
-
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
-  LineElement,
-  PointElement,
   BarController,
+  PointElement,
   Title,
   Tooltip,
   Legend
