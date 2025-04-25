@@ -1,37 +1,39 @@
 'use client';
 
-import { Bar } from 'react-chartjs-2';  
+import { useState, useEffect } from 'react';
+import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,      
-  BarController,   
+  BarElement,
   Title,
   Tooltip,
   Legend,
-  LineController,
-  ChartOptions   
+  BarController,
+  ChartOptions
 } from 'chart.js';
 import cities from '../data/processedNomadData';
 
-
+// Register only the components needed for Bar charts
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,     
-  BarController,  
-  LineController,
+  BarElement,
+  BarController,
   Title,
   Tooltip,
   Legend
 );
 
 const BarChart = () => {
+  // Add client-side rendering logic
+  const [isClient, setIsClient] = useState(false);
+  
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const validCities = cities.filter(city => 
     city.place && 
     city.cost_nomad !== undefined && 
@@ -43,7 +45,6 @@ const BarChart = () => {
     .sort((a, b) => (b.nomad_score || 0) - (a.nomad_score || 0))
     .slice(0, 10);
     
-
   const cityNames = topCities.map((city, index) => city.place || `City ${index}`);
   const monthlyCosts = topCities.map(city => city.cost_nomad || 0);
 
@@ -84,15 +85,26 @@ const BarChart = () => {
 
   const options: ChartOptions<'bar'> = {
     responsive: true,
+    maintainAspectRatio: true,
     plugins: {
       legend: {
         position: 'top' as const,
-        labels: {
-          generateLabels: function(chart: any) {
-            const originalLabels = ChartJS.defaults.plugins.legend.labels.generateLabels(chart);
-            return originalLabels;
-          }
-        }
+      },
+      tooltip: {
+        enabled: true,
+        backgroundColor: 'rgba(0,0,0,0.8)',
+        titleColor: '#ffffff',
+        bodyColor: '#ffffff',
+        titleFont: {
+          size: 14,
+        },
+        bodyFont: {
+          size: 13,
+        },
+        padding: 10,
+        cornerRadius: 4,
+        displayColors: true,
+        usePointStyle: true
       },
       title: {
         display: true,
@@ -115,6 +127,15 @@ const BarChart = () => {
       }
     },
   };
+
+  // Show loading state on server or during hydration
+  if (!isClient) {
+    return (
+      <div className="bg-white p-6 rounded-lg shadow-md mt-8 h-[400px] flex items-center justify-center">
+        <div className="text-gray-500">Loading chart...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md mt-8">

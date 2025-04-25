@@ -14,9 +14,11 @@ const renderComponent = (componentName: string) => {
       return <NomadMap />;
     case 'BarChartVisas':
       return (
-        <div className="py-4">
+        <div className="py-4 w-full max-w-5xl mx-auto">
           <ChartErrorBoundary>
-            <BarChartVisas />
+            <div className="chart-container">
+              <BarChartVisas />
+            </div>
           </ChartErrorBoundary>
         </div>
       );

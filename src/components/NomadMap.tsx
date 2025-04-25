@@ -1,6 +1,3 @@
-// src/components/NomadMap.tsx
-
-"use client";
 import React, { useEffect, useState, useMemo } from 'react';
 import {
   ComposableMap,
@@ -11,28 +8,23 @@ import {
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 import HydrationErrorSuppressor from './HydrationErrorSuppressor';
-
-// Adjust path to your JSON data
 import rawCitiesData from '../../csvjson.json';
 
-// TopoJSON world map URL
+
 const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
 
-// Median US nomad salary (monthly) - baseline for arbitrage calculation
+
 const MEDIAN_US_NOMAD_SALARY = 3000; // $3,000/month
 
-// Arbitrage thresholds
 const EXPENSIVE_THRESHOLD = 0.8;
 const ARBITRAGE_THRESHOLD = 1.5;
 
-// Available colorblind modes
 type ColorblindMode = 'none' | 'deuteranopia' | 'protanopia' | 'tritanopia' | 'monochromacy';
 
-// Add a new type for visualization mode
 type VisualizationMode = 'size' | 'color' | 'opacity';
 type AttributeKey = 'nomad_score' | 'internet_speed' | 'cost_nomad' | 'safety' | 'life_score' | 'friendly_to_foreigners' | 'freedom_score' | 'arbitrage_index';
 
-// Strongly typed city interface
+
 interface NomadCity {
   id: string;
   place: string;
@@ -49,7 +41,6 @@ interface NomadCity {
   arbitrage_index?: number;
 }
 
-// Fixed type definition for Geography objects
 interface GeographyType {
   rsmKey: string;
   properties: {
@@ -81,7 +72,6 @@ const NomadMap: React.FC = () => {
   useEffect(() => {
     const validCities: NomadCity[] = (rawCitiesData as any[])
       .filter(item => {
-        // Basic validation to make sure we have both place name and coordinates
         const place = item.places_to_work;
         if (typeof place !== 'string' || !place.trim() || place.includes('DotMap')) return false;
         const lat = parseFloat(item.leisure);
@@ -95,11 +85,9 @@ const NomadMap: React.FC = () => {
         const nomad = parseFloat(item.nomad_score || item.nomadScore) || 0;
         const internet = parseFloat(item.internet_speed) || 0;
         
-        // Parse additional attributes, ensuring they're valid numbers
         const cost = typeof item.cost_nomad === 'number' ? item.cost_nomad : 
                     !isNaN(parseFloat(String(item.cost_nomad))) ? parseFloat(String(item.cost_nomad)) : undefined;
         
-        // Calculate arbitrage index if cost_nomad is valid
         const arbitrage = cost && cost > 0 ? MEDIAN_US_NOMAD_SALARY / cost : undefined;
         
         const safety = typeof item.safety === 'number' ? item.safety : 
@@ -125,7 +113,7 @@ const NomadMap: React.FC = () => {
           nomad_score: nomad,
           internet_speed: internet,
           cost_nomad: cost,
-          arbitrage_index: arbitrage, // Add arbitrage index
+          arbitrage_index: arbitrage,
           safety: safety,
           life_score: life,
           friendly_to_foreigners: friendly,
@@ -133,9 +121,7 @@ const NomadMap: React.FC = () => {
         };
       });
 
-    console.log('Loaded cities:', validCities.length);
     
-    // Calculate min/max arbitrage values
     const arbitrageValues = validCities
       .map(city => city.arbitrage_index)
       .filter((v): v is number => typeof v === 'number' && !isNaN(v) && v > 0);
@@ -149,7 +135,6 @@ const NomadMap: React.FC = () => {
     setCities(validCities);
   }, []);
 
-  // Calculate min/max for each attribute
   const attributeRanges = useMemo(() => {
     if (!cities.length) return {};
     
@@ -180,103 +165,75 @@ const NomadMap: React.FC = () => {
     };
   }, [cities]);
 
-  // Helper function to normalize a value within a range
+
   const normalizeValue = (value: number | undefined, attr: AttributeKey): number => {
-    // If value is undefined or NaN, return a default value
     if (value === undefined || isNaN(value) || !attributeRanges[attr]) return 0.5;
     
     const { min, max } = attributeRanges[attr];
-    // If min equals max, avoid division by zero
     if (max === min) return 0.5;
     
-    // Special handling for cost_nomad (use median for better distribution)
     if (attr === 'cost_nomad') {
       const { median } = attributeRanges[attr];
-      // For cost, lower is better (higher normalized value)
       return value < median 
         ? 0.5 + (median - value) / (median - min) * 0.5 
         : (max - value) / (max - median) * 0.5;
     }
     
-    // Special handling for arbitrage_index
     if (attr === 'arbitrage_index') {
-      // For arbitrage, higher is better (1.0 or more is good)
-      // Use EXPENSIVE_THRESHOLD and ARBITRAGE_THRESHOLD for coloring
       if (value < EXPENSIVE_THRESHOLD) {
-        // Below 0.8: remap to 0.0-0.33
         return Math.max(0, Math.min(0.33, value / EXPENSIVE_THRESHOLD * 0.33));
       } else if (value < ARBITRAGE_THRESHOLD) {
-        // Between 0.8 and 1.5: remap to 0.33-0.66
         return 0.33 + Math.min(0.33, (value - EXPENSIVE_THRESHOLD) / (ARBITRAGE_THRESHOLD - EXPENSIVE_THRESHOLD) * 0.33);
       } else {
-        // Above 1.5: remap to 0.66-1.0
-        // Cap at max to avoid extreme values dominating the scale
         const cappedValue = Math.min(value, max);
         return 0.66 + Math.min(0.34, (cappedValue - ARBITRAGE_THRESHOLD) / (max - ARBITRAGE_THRESHOLD) * 0.34);
       }
     }
     
-    // Return normalized value, ensuring it's between 0 and 1
     const normalized = (value - min) / (max - min);
     return Math.max(0, Math.min(1, normalized));
   };
   
-  // Get color based on attribute value and colorblind mode
   const getAttributeColor = (value: number | undefined, attr: AttributeKey): string => {
     const normalized = normalizeValue(value, attr);
     
-    // Special color scheme for arbitrage index
     if (attr === 'arbitrage_index') {
-      // Different color schemes based on colorblind mode
       switch(colorblindMode) {
         case 'deuteranopia': 
         case 'protanopia':
-          // Blue to Yellow scheme (better for red-green deficiency)
           if (normalized < 0.33) {
-            // Dark blue (expensive) to medium blue
             return `rgb(25, 25, ${Math.round(100 + normalized * 3 * 155)})`;
           } else if (normalized < 0.66) {
-            // Medium blue to light blue/white
             const factor = (normalized - 0.33) * 3;
             return `rgb(${Math.round(25 + factor * 230)}, ${Math.round(25 + factor * 230)}, 255)`;
           } else {
-            // Light blue/white to yellow (arbitrage)
             const factor = (normalized - 0.66) * 3;
             return `rgb(255, 255, ${Math.round(255 - factor * 210)})`;
           }
           
         case 'tritanopia':
-          // Purple to Orange scheme (better for blue deficiency)
           if (normalized < 0.33) {
-            // Purple (expensive)
             return `rgb(${Math.round(100 + normalized * 3 * 155)}, 50, ${Math.round(100 + normalized * 3 * 155)})`;
           } else if (normalized < 0.66) {
-            // Purple to white
             const factor = (normalized - 0.33) * 3;
             return `rgb(${Math.round(255 - factor * 50)}, ${Math.round(50 + factor * 205)}, ${Math.round(255 - factor * 50)})`;
           } else {
-            // White to orange (arbitrage)
             const factor = (normalized - 0.66) * 3;
             return `rgb(255, ${Math.round(255 - factor * 120)}, 50)`;
           }
           
         case 'monochromacy':
-          // Pure grayscale with patterns
           const grayVal = Math.round(normalized * 220);
           return `rgb(${grayVal}, ${grayVal}, ${grayVal})`;
           
         default:
-          // Original colorful scheme: Red → Orange → Yellow → Green
           if (normalized < 0.33) {
-            // Below EXPENSIVE_THRESHOLD: Red to Orange (0 to 30 hue)
             const hue = normalized * 3 * 30;
             return `hsla(${hue}, 90%, 50%, 1)`;
           } else if (normalized < 0.66) {
-            // Between thresholds: Orange to Yellow (30 to 60 hue)
             const hue = 30 + (normalized - 0.33) * 3 * 30;
             return `hsla(${hue}, 90%, 50%, 1)`;
           } else {
-            // Above ARBITRAGE_THRESHOLD: Yellow to Green (60 to 120 hue)
             const hue = 60 + (normalized - 0.66) * 3 * 60;
             return `hsla(${hue}, 90%, 50%, 1)`;
           }
@@ -285,70 +242,54 @@ const NomadMap: React.FC = () => {
     
     // Other attributes
     if (attr === 'cost_nomad') {
-      // Cost: lower is better
       switch(colorblindMode) {
         case 'deuteranopia':
         case 'protanopia':
-          // Blue (low cost) to Yellow (high cost) for red-green deficiency
           return `rgb(${Math.round(normalized * 255)}, ${Math.round(normalized * 255)}, ${Math.round(255 - normalized * 255)})`;
           
         case 'tritanopia':
-          // Purple (low cost) to Orange (high cost) for blue deficiency
           return `rgb(${Math.round(150 + normalized * 105)}, ${Math.round(50 + normalized * 130)}, ${Math.round(200 - normalized * 150)})`;
           
         case 'monochromacy':
-          // Light (low cost) to Dark (high cost)
           const val = Math.round(220 - normalized * 180);
           return `rgb(${val}, ${val}, ${val})`;
           
         default:
-          // Original: Green (low) to Red (high)
           const hue = 120 - normalized * 120;
           return `hsla(${hue}, 70%, 50%, 1)`;
       }
     } else {
-      // Everything else: higher is better
       switch(colorblindMode) {
         case 'deuteranopia':
         case 'protanopia':
-          // Yellow (high value) to Blue (low value) for red-green deficiency
           return `rgb(${Math.round(normalized * 255)}, ${Math.round(normalized * 255)}, ${Math.round(255 - normalized * 200)})`;
           
         case 'tritanopia':
-          // Orange (high value) to Purple (low value) for blue deficiency
           return `rgb(${Math.round(150 + normalized * 105)}, ${Math.round(normalized * 180)}, ${Math.round(150 - normalized * 100)})`;
           
         case 'monochromacy':
-          // Light (high value) to Dark (low value)
           const val = Math.round(40 + normalized * 180);
           return `rgb(${val}, ${val}, ${val})`;
           
         default:
-          // Original: Red (low) to Green (high)
           const hue = normalized * 120;
           return `hsla(${hue}, 70%, 50%, 1)`;
       }
     }
   };
   
-  // Get size based on attribute value
   const getAttributeSize = (value: number | undefined, attr: AttributeKey): number => {
-    // Default size if value is invalid
     if (value === undefined || isNaN(value)) return 3;
     
     const normalized = normalizeValue(value, attr);
-    // Base size 3, maximum size 12
     return 3 + normalized * 9;
   };
 
-  // Get opacity based on attribute value
   const getAttributeOpacity = (value: number | undefined, attr: AttributeKey): number => {
     const normalized = normalizeValue(value, attr);
-    // Ensure minimum opacity for visibility
     return 0.2 + normalized * 0.8;
   };
 
-  // Enhanced marker rendering with patterns for extra colorblind accessibility
   const renderMarker = (city: NomadCity) => {
     const circleSize = getAttributeSize(city[sizeAttribute], sizeAttribute);
     const circleColor = getAttributeColor(city[colorAttribute], colorAttribute);
@@ -362,7 +303,6 @@ const NomadMap: React.FC = () => {
                         city.arbitrage_index !== undefined && 
                         city.arbitrage_index < EXPENSIVE_THRESHOLD;
                         
-    // Add patterns for monochrome mode
     let patternStroke = "none";
     let patternStrokeWidth = 0;
     let pattern = null;
@@ -433,36 +373,33 @@ const NomadMap: React.FC = () => {
     );
   };
 
-  // Build tooltip HTML with colorblind adaptations
+
   const makeTooltip = (c: NomadCity) => {
     const lines: string[] = [];
-    // Use white or high-contrast color for the title instead of default blue
     lines.push(`<strong style="color: #ffffff; font-size: 1.1em;">${c.place}</strong>`);
     if (c.country) lines.push(`<em style="color: #cccccc;">${c.country}</em>`);
     lines.push(`<div style="margin-top:4px; font-size:0.9em;">`);
     
-    // For the arbitrage indicator, use more visible colors
     if (c.arbitrage_index != null) {
-      let arbitrageColor = '#ff5555'; // bright red
+      let arbitrageColor = '#ff5555'; 
       let arbitrageLabel = 'Expensive';
       
-      // Adjust colors for colorblind mode in tooltip with higher contrast
       if (colorblindMode === 'deuteranopia' || colorblindMode === 'protanopia') {
-        arbitrageColor = c.arbitrage_index >= ARBITRAGE_THRESHOLD ? '#ffff00' : // bright yellow 
-                        c.arbitrage_index >= EXPENSIVE_THRESHOLD ? '#00ffff' : // cyan
-                        '#0088ff'; // bright blue
+        arbitrageColor = c.arbitrage_index >= ARBITRAGE_THRESHOLD ? '#ffff00' : 
+                        c.arbitrage_index >= EXPENSIVE_THRESHOLD ? '#00ffff' : 
+                        '#0088ff'; 
       } else if (colorblindMode === 'tritanopia') {
-        arbitrageColor = c.arbitrage_index >= ARBITRAGE_THRESHOLD ? '#ffa500' : // bright orange
-                        c.arbitrage_index >= EXPENSIVE_THRESHOLD ? '#ffffff' : // white
-                        '#ff00ff'; // magenta
+        arbitrageColor = c.arbitrage_index >= ARBITRAGE_THRESHOLD ? '#ffa500' : 
+                        c.arbitrage_index >= EXPENSIVE_THRESHOLD ? '#ffffff' : 
+                        '#ff00ff'; 
       } else if (colorblindMode === 'monochromacy') {
-        arbitrageColor = c.arbitrage_index >= ARBITRAGE_THRESHOLD ? '#ffffff' : // white
-                        c.arbitrage_index >= EXPENSIVE_THRESHOLD ? '#bbbbbb' : // light gray
-                        '#777777'; // darker gray
+        arbitrageColor = c.arbitrage_index >= ARBITRAGE_THRESHOLD ? '#ffffff' :
+                        c.arbitrage_index >= EXPENSIVE_THRESHOLD ? '#bbbbbb' :
+                        '#777777'; 
       } else {
-        arbitrageColor = c.arbitrage_index >= ARBITRAGE_THRESHOLD ? '#55ff55' : // bright green
-                        c.arbitrage_index >= EXPENSIVE_THRESHOLD ? '#ffaa00' : // bright orange
-                        '#ff5555'; // bright red
+        arbitrageColor = c.arbitrage_index >= ARBITRAGE_THRESHOLD ? '#55ff55' :
+                        c.arbitrage_index >= EXPENSIVE_THRESHOLD ? '#ffaa00' :
+                        '#ff5555'; 
       }
       
       if (c.arbitrage_index >= ARBITRAGE_THRESHOLD) {
@@ -789,16 +726,17 @@ const NomadMap: React.FC = () => {
         <Tooltip
           id="nomad-tooltip"
           place="top"
-          noArrow
+          html={tooltipHtml}
           style={{
-            background: 'rgba(30,30,30,0.9)',
+            background: 'rgba(15,15,15,0.95)',
             color: '#fff',
-            padding: '8px 12px',
+            padding: '10px 14px',
             borderRadius: '4px',
-            maxWidth: '240px',
-            lineHeight: 1.4,
-            fontSize: '0.9em',
-            zIndex: 1000
+            maxWidth: '260px',
+            lineHeight: 1.5,
+            fontSize: '0.95em',
+            zIndex: 1000,
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)'
           }}
         />
       </div>

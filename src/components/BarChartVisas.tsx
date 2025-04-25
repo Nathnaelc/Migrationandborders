@@ -608,35 +608,6 @@ const BarChartVisas = () => {
           </div>
         </motion.div>
       </div>
-      
-      {/* Key Insights */}
-      <motion.div 
-        className="mt-4 bg-gray-50 p-4 rounded-md shadow"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-      >
-        <h3 className="text-lg font-medium text-black mb-2">Key Insights:</h3>
-        <ul className="list-disc list-inside text-black text-sm space-y-2">
-          <li>
-            <strong>Global North Dominance:</strong> Europe and North America offer the most nomad visa programs, highlighting the economic privilege gap.
-          </li>
-          <li>
-            <strong>Mobility Inequality:</strong> While digital nomads from wealthy nations enjoy global mobility options, migrant workers from the Global South face significant restrictions.
-          </li>
-          <li>
-            <strong>Structural Privilege:</strong> Nomad visas typically require proof of remote income from wealthy countries, creating a two-tiered mobility system.
-          </li>
-          <li>
-            <strong>Economic Arbitrage:</strong> These programs enable privileged workers to maintain Western salaries while living in lower-cost regions, benefiting from global economic disparities.
-          </li>
-          {sortType === 'globalNorthSouth' && (
-            <li>
-              <strong>Geographic Inequality:</strong> The visualization clearly shows how mobility privileges are concentrated in the Global North, while regions in the Global South have fewer programs despite having more countries.
-            </li>
-          )}
-        </ul>
-      </motion.div>
     </motion.div>
   );
 };

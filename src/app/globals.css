@@ -218,3 +218,32 @@ div[class*="w-full md:w-[95vw]"] {
 .section-content h2:first-child {
   display: none;
 }
+
+/* Fix for tooltips */
+#chartjs-tooltip {
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: 9999 !important;
+  pointer-events: none;
+  position: absolute;
+  transition: all 0.1s ease;
+}
+
+/* Chart.js needs proper canvas rendering */
+.chartjs-render-monitor {
+  animation: chartjs-render-animation 0.001s;
+}
+
+@keyframes chartjs-render-animation {
+  0% { opacity: 0.99; }
+  100% { opacity: 1; }
+}
+
+/* Chart container for proper dimensions */
+.chart-container {
+  position: relative;
+  height: 400px;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
