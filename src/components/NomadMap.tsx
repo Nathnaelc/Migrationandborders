@@ -10,6 +10,10 @@ import 'react-tooltip/dist/react-tooltip.css';
 import HydrationErrorSuppressor from './HydrationErrorSuppressor';
 import rawCitiesData from '../../csvjson.json';
 
+// Add a caption prop to the component
+interface NomadMapProps {
+  caption?: string;
+}
 
 const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
 
@@ -53,7 +57,7 @@ interface GeographyType {
   };
 }
 
-const NomadMap: React.FC = () => {
+const NomadMap: React.FC<NomadMapProps> = ({ caption }) => {
   const [cities, setCities] = useState<NomadCity[]>([]);
   const [tooltipHtml, setTooltipHtml] = useState<string>("");
   const [highlightCountry, setHighlightCountry] = useState<string | null>(null);
@@ -441,20 +445,24 @@ const NomadMap: React.FC = () => {
 
   return (
     <HydrationErrorSuppressor>
-      <div className="w-full md:w-[95vw] max-w-none relative left-1/2 right-1/2 transform -translate-x-1/2 h-[700px] bg-white border rounded-lg overflow-hidden px-4 md:px-8 xl:px-12">
-        <div className="w-full h-full">
+      <div className="w-full md:w-[95vw] h-[1000px] max-w-none relative left-1/2 right-1/2 transform -translate-x-1/2 mb-20">
+        {/* Title */}
+        <div className="pt-6 pb-2 text-center">
+          <h2 className="text-2xl font-bold mb-1 text-gray-900">Global Digital Nomad City Map</h2>
+        </div>
+        <div className="w-full h-[820px] bg-white border rounded-lg overflow-hidden px-4 md:px-8 xl:px-12">
           <ComposableMap
             projectionConfig={{ 
               scale: 230,
-              center: [40, 10],
+              center: [10, 10],
               rotate: [0, 0, 0]
             }}
             style={{ 
               width: '100%',
               height: '100%',
-              minWidth: '100vw',
+              minWidth: '100%', 
               minHeight: '700px',
-              maxWidth: '100vw',
+              maxWidth: '100%',
               display: 'block',
             }}
             data-tooltip-id="nomad-tooltip"
@@ -492,8 +500,16 @@ const NomadMap: React.FC = () => {
           </ComposableMap>
         </div>
 
+        {/* Move caption OUTSIDE the map container */}
+        {caption && (
+          <div className="mt-6 mb-10 text-center text-gray-700 text-sm max-w-3xl mx-auto">
+            <p className="font-bold mb-1">Figure 3</p>
+            {caption}
+          </div>
+        )}
+
         {/* Dynamic Legend & Controls */}
-        <div className="absolute top-2 right-4 lg:right-6 bg-white bg-opacity-95 p-3 rounded-lg text-sm text-black shadow-md max-w-[280px]">
+        <div className="absolute top-2 right-4 lg:right-2 bg-white bg-opacity-95 p-3 mt-28 rounded-lg text-sm text-black shadow-md max-w-[280px]">
           <div className="font-semibold text-black mb-3 text-center">Visualization Controls</div>
           
           {/* Colorblind Mode Control */}
@@ -638,7 +654,7 @@ const NomadMap: React.FC = () => {
         </div>
 
         {/* Arbitrage Index Legend with Colorblind Adaptations */}
-        <div className="absolute bottom-2 left-2 bg-white bg-opacity-95 p-3 rounded-lg text-sm shadow-md">
+        <div className="absolute bottom-2 left-2 bg-white bg-opacity-95 p-3 mb-20 rounded-lg text-sm shadow-md">
           <div className="font-semibold text-black mb-1">
             Arbitrage Index
             {colorblindMode !== 'none' && <span className="ml-2 text-xs bg-blue-100 px-1 py-0.5 rounded">Colorblind Mode: {colorblindMode}</span>}
@@ -714,7 +730,6 @@ const NomadMap: React.FC = () => {
             </>
           )}
 
-          {/* Help text for patterns in monochrome mode */}
           {colorblindMode === 'monochromacy' && (
             <div className="mt-2 text-xs text-gray-600">
               <p>High-value areas also use patterns for better distinction</p>
@@ -739,6 +754,10 @@ const NomadMap: React.FC = () => {
             boxShadow: '0 4px 6px rgba(0,0,0,0.3)'
           }}
         />
+        {/* Caption at the bottom */}
+        <div className="pt-6 pb-8 text-center text-gray-700 text-sm">
+          {caption || "This interactive map visualizes digital nomad cities worldwide, showing economic arbitrage, cost of living, and quality of life indicators. Hover over a city to see detailed metricsss."}
+        </div>
       </div>
     </HydrationErrorSuppressor>
   );

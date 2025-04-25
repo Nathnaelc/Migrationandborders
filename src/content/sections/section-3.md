@@ -1,17 +1,52 @@
 ---
-title: "The Arbitrage Effect in the Digital Economy"
+title: "Interactive Map Analysis and Visualizing the Arbitrage Divide"
 id: "section-3"
 order: 3
 insertComponentAfter: "NomadMap"
+mapCaption: "Figure 3: Interactive visualization of the digital nomad arbitrage index across global cities. Larger, greener circles indicate higher arbitrage potential for remote workers."
 ---
 
 
+In this analysis I use a baseline salary of **$3,000/month** as a conservative median for U.S.-based remote professionals across software development, digital marketing, and design sectors. This figure meets most digital nomad visa requirements while reflecting typical professional incomes rather than outlier tech salaries.
 
-My interactive visualization vividly captures the implications of economic arbitrage exercised by digital nomads. The selection of a median monthly salary of $3,000, reflective of a standard US remote professional's income, provides a concrete basis for evaluating the economic advantages available to digital nomads worldwide. By setting circle size, colors, and opacity based on attributes like Arbitrage Index, Cost of Living, and Nomad Score, the map robustly demonstrates the stark economic disparities exploited by digital nomads.
+<div class="math-formula">
+  <strong>Arbitrage Index</strong> = <div class="fraction"><span class="numerator">Median US Nomad Salary</span><span class="denominator">Nomad Living Cost (City)</span></div>
+</div>
 
-High Arbitrage Index scores, indicated by greener circles on our map, show regions where digital nomads experience significant economic leverage. Cities with high Nomad Scores typically combine appealing factors such as robust internet connectivity, favorable safety ratings, high-quality life standards, and openness to foreigners. These metrics help explain why digital nomads flock to particular destinations. For example, Lisbon scores highly on freedom and life quality, coupled with reasonable costs compared to global North cities, further attracting affluent remote workers (Reuters, 2023).
+<style>
+.math-formula {
+  text-align: center;
+  font-size: 1.2em;
+  margin: 2em 0;
+  padding: 1em;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+.fraction {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  margin: 0 0.2em;
+}
+.numerator {
+  display: block;
+  padding: 0.2em;
+  border-bottom: 1px solid black;
+}
+.denominator {
+  display: block;
+  padding: 0.2em;
+}
+</style>
 
-However, these positive attributes also signify areas at risk of socioeconomic strain. Local communities frequently encounter rising costs of living, displacement due to soaring rents, and socio-cultural tensions as foreigners’ economic power reshapes neighborhoods. Our visualization thus not only reveals optimal nomad destinations but also critically highlights cities facing acute impacts from this growing mobility trend.
+Higher index values (1.5x) identify cities where remote workers maximize their income potential, typically in locations combining low living costs with robust digital infrastructure. The visualization represents these values through **larger, greener circles** on the map, highlighting cities where nomads exercise disproportionate economic leverage.
 
-Through this robust analysis, the interactive tools underscore a central argument of our study: rather than democratizing opportunities, the digital nomad phenomenon intensifies global socioeconomic disparities by granting mobility and economic leverage to a select few, predominantly from wealthy nations, at the expense of local communities.
+Complementary metrics enhance this analysis, including **Nomad Score**, **Internet Speed**, **Safety**, **Life Quality**, and **Foreigner Friendliness**. These factors explain the gravitational pull of specific destinations. Cities like Lisbon and Chiang Mai consistently rank high across these categories, marking them as attractive yet increasingly pressured nomad hubs.
 
+This economic advantage creates profound structural imbalances. The concentration of economic power among mobile, high-income foreigners increases demand for short-term accommodations, driving housing prices upward and accelerating gentrification. Local communities suffer displacement, wage stagnation, and cultural erosion as a result. The visualization captures these impacts through spatial clustering and inflation zones across affected regions.
+
+The map exposes systematic feedback loop. Cities with high arbitrage value draw high numbers of digital nomads -> their concentration drives housing costs upward -> these economic pressures force local residents from their neighborhoods -> and affected communities respond through organized protests and policy demands (Gill et al., 2022). This cycle repeats across popular nomad destinations, creating predictable waves of gentrification and resistance. Lisbon exemplifies this pattern, where Airbnb saturation has forced long-term residents from neighborhoods they can no longer afford (Matoušek, 2024).
+
+Understanding these dynamics enable us to see the patterns. The visualization identifies cities approaching stress points, reveals emerging conflict zones, and provides evidence for policymakers working to balance mobility rights with local equity. It challenges the widely promoted narrative that remote work democratizes opportunity, showing instead how it often deepens global divides without intentional management.
+
+The arbitrage aspect of the map below shows abstract economic concepts through geographic patterns, connecting individual decisions to systemic outcomes. It demonstrates how privileged mobility creates ripple effects across urban landscapes worldwide, affecting housing markets, local businesses, and community cohesion. This spatial analysis gives a foundation for more ethical approaches to global work that acknowledge power imbalances inherent in current nomadic practices.

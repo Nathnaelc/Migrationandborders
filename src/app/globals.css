@@ -62,7 +62,7 @@ body {
 }
 
 .markdown-section strong {
-  @apply font-semibold text-blue-800;
+  @apply font-semibold text-gray-800;
 }
 
 .markdown-section code {
@@ -100,6 +100,12 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: normal;
   line-height: 1.6;
   padding: 0 10px;
+  margin-bottom: 4rem !important;
+  padding-bottom: 2rem !important;
+  position: relative;
+  padding-top: 1rem !important;
+  clear: both !important;
+  display: block !important;
 }
 
 .markdown-section h1,
@@ -126,6 +132,9 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
+  margin-bottom: 4rem !important; 
+  padding-bottom: 2rem !important;
+  overflow: visible !important;
 }
 
 [data-gr-ext-installed], [data-new-gr-c-s-check-loaded] {
@@ -174,10 +183,11 @@ div:has(> .rsm-svg) {
 
 /* Smooth border for the map container */
 div[class*="w-full md:w-[95vw]"] {
-  border: 1px solid #e5e7eb !important;
+  border: 1px solid #e5e7eb !important; /* light gray */
   border-radius: 0.5rem !important;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
   overflow: hidden !important;
+  margin-bottom: 7rem !important; /* Add significant margin to ensure caption visibility */
 }
 
 /* Add specific styles for the map geography elements */
@@ -246,4 +256,49 @@ div[class*="w-full md:w-[95vw]"] {
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
+  margin-bottom: 6rem !important;
+  padding-bottom: 2rem !important;
 }
+
+.rsm-svg, .map-container, .visualization-container {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  height: 700px !important; /* Reduced from 750px */
+}
+
+.component-caption {
+  margin-top: 1rem !important;
+  margin-bottom: 4rem !important;
+  padding: 0.5rem !important;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #555;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-content {
+  margin-bottom: 2rem !important;
+}
+
+div:has(> .chart-container) {
+  margin-bottom: 6rem !important;
+  padding-bottom: 2rem !important;
+  display: block !important;
+  clear: both !important;
+  overflow: auto !important;
+  margin-top: 2rem !important;
+}
+
+/* Add these specific styles to fix chart and section overlapping */
+
+/* Make sure section 5 doesn't overlap with previous content */
+.markdown-section:nth-child(5) {
+  margin-top: 4rem !important;
+  padding-top: 2rem !important;
+  border-top: 1px solid #eee;
+}
+
+

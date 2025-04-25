@@ -117,7 +117,7 @@ const BarChartVisas = () => {
   const [activeVisaType, setActiveVisaType] = useState<string>('all');
   const [sortType, setSortType] = useState<string>('highestToLowest');
   const [showPercentages, setShowPercentages] = useState<boolean>(true);
-  const [showRatio, setShowRatio] = useState<boolean>(false);
+  const [showRatio, setShowRatio] = useState<boolean>(true);
   const [animateChart, setAnimateChart] = useState<boolean>(false);
   
   // Store the processed data for different filtering options
@@ -508,15 +508,17 @@ const BarChartVisas = () => {
       </div>
       
       {/* Chart and Legend */}
-      <div className="bg-white rounded-lg shadow p-4">
-        <div className="h-[500px] w-full relative">
+      <div className="bg-white rounded-lg h-[500px] p-4 mb-24">
+        <div className="h-[400px] w-full relative">
           {isLoading ? (
             <div className="flex justify-center items-center h-full">
               <p>Loading data...</p>
             </div>
           ) : (
             chartData.labels?.length > 0 ? (
-              <Bar data={chartData} options={options} />
+              <div className="bg-white p-4 rounded-lg w-full" style={{ height: '400px', overflowY: 'hidden' }}>
+                <Bar data={chartData} options={options} />
+              </div>
             ) : (
               <div className="flex justify-center items-center h-full">
                 <p>No nomad visa data available.</p>
@@ -526,7 +528,7 @@ const BarChartVisas = () => {
           
           {/* Additional Information - Annotations */}
           {chartData.labels?.length > 0 && sortType === 'globalNorthSouth' && (
-            <div className="absolute top-12 right-12 bg-white bg-opacity-90 p-2 rounded shadow text-xs">
+            <div className="absolute top-4 right-4 bg-white bg-opacity-90 p-2 rounded shadow text-xs z-10">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full text-black bg-[rgba(106,81,163,0.7)]"></div>
                 <span>Global North</span>
@@ -539,8 +541,8 @@ const BarChartVisas = () => {
           )}
         </div>
         
-        {/* Detailed stats under the chart */}
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Detailed stats under the chart - with clear separation */}
+        <div className="mt-16 border-t pt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
           {showPercentages && (
             <motion.div 
               className="bg-gray-50 p-3 rounded shadow-sm"

@@ -5,6 +5,8 @@ import { remark } from 'remark';
 import html from 'remark-html';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 
 export interface MarkdownContent {
   id: string;
@@ -13,6 +15,8 @@ export interface MarkdownContent {
   contentHtml: string;
   rawContent: string;
   insertComponentAfter?: string; 
+  mapCaption?: string;
+  chartCaption?: string;
 }
 
 const sectionsDirectory = path.join(process.cwd(), 'src/content/sections');
@@ -46,7 +50,11 @@ export async function getAllSections(): Promise<MarkdownContent[]> {
 
       // Process markdown content to HTML
       const processedContent = await remark()
+        .use(remarkGfm)
+        .use(remarkBreaks)
+        .use(remarkMath)
         .use(html, { sanitize: false }) // Don't sanitize to preserve styling
+        .use(rehypeKatex) // Make sure this is included
         .process(matterResult.content);
       const contentHtml = processedContent.toString();
 
@@ -73,10 +81,15 @@ export async function getSectionContent(id: string): Promise<MarkdownContent> {
   // Use gray-matter to parse the section metadata
   const matterResult = matter(fileContents);
 
-  // Process markdown content to HTML
+  // Process markdown content to HTML - add math support
   const processedContent = await remark()
+    .use(remarkGfm)
+    .use(remarkBreaks)
+    .use(remarkMath)
     .use(html, { sanitize: false }) // Don't sanitize to preserve styling
+    .use(rehypeKatex) // Make sure this is included
     .process(matterResult.content);
+    
   const contentHtml = processedContent.toString();
 
   return {
@@ -86,5 +99,7 @@ export async function getSectionContent(id: string): Promise<MarkdownContent> {
     contentHtml,
     rawContent: matterResult.content,
     insertComponentAfter: matterResult.data.insertComponentAfter || '',
+    mapCaption: matterResult.data.mapCaption || '',
+    chartCaption: matterResult.data.chartCaption || '',
   };
 }
