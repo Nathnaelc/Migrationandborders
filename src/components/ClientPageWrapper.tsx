@@ -4,17 +4,22 @@ import { useState, useEffect } from 'react';
 import NomadMap from './NomadMap';
 import dynamic from 'next/dynamic';
 import { MarkdownContent } from '../utils/markdown';
-
+import ChartErrorBoundary from './ChartErrorBoundary';
 
 const BarChartVisas = dynamic(() => import('./BarChartVisas'), { ssr: false });
-
 
 const renderComponent = (componentName: string) => {
   switch (componentName) {
     case 'NomadMap':
       return <NomadMap />;
     case 'BarChartVisas':
-      return <BarChartVisas />;
+      return (
+        <div className="py-4">
+          <ChartErrorBoundary>
+            <BarChartVisas />
+          </ChartErrorBoundary>
+        </div>
+      );
     default:
       return null;
   }

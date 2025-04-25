@@ -436,28 +436,33 @@ const NomadMap: React.FC = () => {
   // Build tooltip HTML with colorblind adaptations
   const makeTooltip = (c: NomadCity) => {
     const lines: string[] = [];
-    lines.push(`<strong>${c.place}</strong>`);
-    if (c.country) lines.push(`<em>${c.country}</em>`);
+    // Use white or high-contrast color for the title instead of default blue
+    lines.push(`<strong style="color: #ffffff; font-size: 1.1em;">${c.place}</strong>`);
+    if (c.country) lines.push(`<em style="color: #cccccc;">${c.country}</em>`);
     lines.push(`<div style="margin-top:4px; font-size:0.9em;">`);
     
-    // Add arbitrage index to tooltip with appropriate formatting for colorblind mode
+    // For the arbitrage indicator, use more visible colors
     if (c.arbitrage_index != null) {
-      let arbitrageColor = 'red';
+      let arbitrageColor = '#ff5555'; // bright red
       let arbitrageLabel = 'Expensive';
       
-      // Adjust colors for colorblind mode in tooltip
+      // Adjust colors for colorblind mode in tooltip with higher contrast
       if (colorblindMode === 'deuteranopia' || colorblindMode === 'protanopia') {
-        arbitrageColor = c.arbitrage_index >= ARBITRAGE_THRESHOLD ? 'gold' : 
-                        c.arbitrage_index >= EXPENSIVE_THRESHOLD ? 'lightblue' : 'blue';
+        arbitrageColor = c.arbitrage_index >= ARBITRAGE_THRESHOLD ? '#ffff00' : // bright yellow 
+                        c.arbitrage_index >= EXPENSIVE_THRESHOLD ? '#00ffff' : // cyan
+                        '#0088ff'; // bright blue
       } else if (colorblindMode === 'tritanopia') {
-        arbitrageColor = c.arbitrage_index >= ARBITRAGE_THRESHOLD ? 'orange' : 
-                        c.arbitrage_index >= EXPENSIVE_THRESHOLD ? 'lightgray' : 'purple';
+        arbitrageColor = c.arbitrage_index >= ARBITRAGE_THRESHOLD ? '#ffa500' : // bright orange
+                        c.arbitrage_index >= EXPENSIVE_THRESHOLD ? '#ffffff' : // white
+                        '#ff00ff'; // magenta
       } else if (colorblindMode === 'monochromacy') {
-        arbitrageColor = c.arbitrage_index >= ARBITRAGE_THRESHOLD ? 'white' : 
-                        c.arbitrage_index >= EXPENSIVE_THRESHOLD ? 'lightgray' : 'gray';
+        arbitrageColor = c.arbitrage_index >= ARBITRAGE_THRESHOLD ? '#ffffff' : // white
+                        c.arbitrage_index >= EXPENSIVE_THRESHOLD ? '#bbbbbb' : // light gray
+                        '#777777'; // darker gray
       } else {
-        arbitrageColor = c.arbitrage_index >= ARBITRAGE_THRESHOLD ? 'green' : 
-                        c.arbitrage_index >= EXPENSIVE_THRESHOLD ? 'orange' : 'red';
+        arbitrageColor = c.arbitrage_index >= ARBITRAGE_THRESHOLD ? '#55ff55' : // bright green
+                        c.arbitrage_index >= EXPENSIVE_THRESHOLD ? '#ffaa00' : // bright orange
+                        '#ff5555'; // bright red
       }
       
       if (c.arbitrage_index >= ARBITRAGE_THRESHOLD) {
@@ -783,7 +788,6 @@ const NomadMap: React.FC = () => {
         {/* Tooltip */}
         <Tooltip
           id="nomad-tooltip"
-          html={tooltipHtml}
           place="top"
           noArrow
           style={{

@@ -1,30 +1,37 @@
 'use client';
 
-import { Bar } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';  
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
+  BarElement,      
+  BarController,   
   Title,
   Tooltip,
   Legend,
-  ChartOptions,
+  LineController,
+  ChartOptions   
 } from 'chart.js';
 import cities from '../data/processedNomadData';
 
-// Register ChartJS components
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
+  BarElement,     
+  BarController,  
+  LineController,
   Title,
   Tooltip,
   Legend
 );
 
 const BarChart = () => {
-  // Filter for cities with valid cost data
   const validCities = cities.filter(city => 
     city.place && 
     city.cost_nomad !== undefined && 
@@ -32,13 +39,12 @@ const BarChart = () => {
     city.nomad_score !== undefined
   );
   
-  // Filter to top 10 cities by nomad score
   const topCities = [...validCities]
     .sort((a, b) => (b.nomad_score || 0) - (a.nomad_score || 0))
     .slice(0, 10);
     
-  // Extract data for the chart
-  const cityNames = topCities.map(city => city.place || `City ${Math.random().toString(36).substr(2, 5)}`);
+
+  const cityNames = topCities.map((city, index) => city.place || `City ${index}`);
   const monthlyCosts = topCities.map(city => city.cost_nomad || 0);
 
   const data = {
@@ -82,7 +88,6 @@ const BarChart = () => {
       legend: {
         position: 'top' as const,
         labels: {
-          // Ensure we don't get "DotMap()" in the legend
           generateLabels: function(chart: any) {
             const originalLabels = ChartJS.defaults.plugins.legend.labels.generateLabels(chart);
             return originalLabels;

@@ -10,7 +10,8 @@ import {
   Tooltip,
   Legend,
   LineElement,
-  PointElement
+  PointElement,
+  BarController
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import Papa from 'papaparse';
@@ -23,6 +24,7 @@ ChartJS.register(
   BarElement,
   LineElement,
   PointElement,
+  BarController,
   Title,
   Tooltip,
   Legend
