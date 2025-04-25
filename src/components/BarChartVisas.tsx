@@ -13,10 +13,10 @@ import {
   PointElement
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import csvData from '../../GlobalMigrationGuide1.0.csv';
+import Papa from 'papaparse';
 import { motion } from 'framer-motion';
 
-// Register required Chart.js components
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -35,12 +35,11 @@ interface CountryData {
   [key: string]: string | number | undefined;
 }
 
-// Define continents and their properties
 interface ContinentInfo {
   name: string;
   totalCountries: number;
   isGlobalNorth: boolean;
-  icon: string; // Unicode character or emoji for continent
+  icon: string;
 }
 
 const continentData: Record<string, ContinentInfo> = {
@@ -129,30 +128,31 @@ const BarChartVisas = () => {
     totalVisaCount: 0
   });
 
+  const [csvData, setCsvData] = useState<CountryData[]>([]);
+  
   useEffect(() => {
-    // Process the CSV data to find nomad visa programs by continent
-    processData();
+    // Fetch the CSV file
+    fetch('/GlobalMigrationGuide1.0.csv')
+      .then(response => response.text())
+      .then(text => {
+        // Parse the CSV
+        const result = Papa.parse<CountryData>(text, {
+          header: true,
+          skipEmptyLines: true,
+          dynamicTyping: true
+        });
+        
+        setCsvData(result.data);
+        
+        // Process data after CSV is loaded
+        if (result.data.length > 0) {
+          const processedResults = processVisaData(result.data, activeVisaType);
+          setProcessedData(processedResults);
+          updateChartData(processedResults, sortType);
+        }
+      })
+      .catch(error => console.error('Error loading CSV:', error));
   }, []);
-
-  const processData = () => {
-    try {
-      const data = csvData as unknown as CountryData[];
-      
-      // Process all visa types data
-      const allNomadData = processVisaData(data, 'all');
-      setProcessedData(allNomadData);
-      
-      // Update chart with the processed data
-      updateChartData(allNomadData, sortType);
-      
-      // Add a small delay before enabling animations (for initial render)
-      setTimeout(() => setAnimateChart(true), 500);
-      
-    } catch (error) {
-      console.error('Error processing data:', error);
-      setIsLoading(false);
-    }
-  };
 
   const processVisaData = (data: CountryData[], visaType: string) => {
     let filteredCountries;

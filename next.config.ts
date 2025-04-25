@@ -6,16 +6,24 @@ const nextConfig: NextConfig = {
     // Add support for CSV file imports
     config.module.rules.push({
       test: /\.csv$/,
-      loader: 'csv-loader',
-      options: {
-        dynamicTyping: true,
-        header: true,
-        skipEmptyLines: true
-      }
+      use: [
+        {
+          loader: 'csv-loader',
+          options: {
+            dynamicTyping: true,
+            header: true,
+            skipEmptyLines: true
+          }
+        }
+      ]
     });
 
     return config;
   },
+  reactStrictMode: true,
+  compiler: {
+    reactRemoveProperties: process.env.NODE_ENV === 'production' ? { properties: ['^data-gr-'] } : undefined,
+  }
 };
 
 export default nextConfig;

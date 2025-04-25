@@ -8,7 +8,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var (--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -23,4 +23,198 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.markdown-section h1 {
+  @apply text-3xl font-bold mb-6 text-blue-700;
+}
+
+.markdown-section h2 {
+  @apply text-2xl font-semibold mb-4 text-blue-600 mt-8;
+}
+
+.markdown-section h3 {
+  @apply text-xl font-medium mb-3 text-blue-500 mt-6;
+}
+
+.markdown-section p {
+  @apply mb-4 text-gray-700 leading-relaxed;
+}
+
+.markdown-section ul {
+  @apply list-disc pl-6 mb-4;
+}
+
+.markdown-section ol {
+  @apply list-decimal pl-6 mb-4;
+}
+
+.markdown-section li {
+  @apply mb-1;
+}
+
+.markdown-section blockquote {
+  @apply border-l-4 border-blue-500 pl-4 py-1 mb-4 italic text-gray-600 bg-blue-50;
+}
+
+.markdown-section a {
+  @apply text-blue-600 hover:text-blue-800 underline;
+}
+
+.markdown-section strong {
+  @apply font-semibold text-blue-800;
+}
+
+.markdown-section code {
+  @apply font-mono bg-gray-100 px-1 py-0.5 rounded text-sm;
+}
+
+
+html, body {
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  line-height: 1.5;
+  font-weight: normal;
+  letter-spacing: normal;
+  max-width: 100%;
+}
+
+body, html {
+  color: #000;
+}
+
+.container {
+  max-width: 1000px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: normal;
+  line-height: 1.3;
+  word-spacing: 0.05em;
+  color: #000 !important;
+}
+
+.markdown-section {
+  max-width: 800px;
+  margin: 0 auto;
+  color: #000 !important;
+  letter-spacing: normal;
+  line-height: 1.6;
+  padding: 0 10px;
+}
+
+.markdown-section h1,
+.markdown-section h2,
+.markdown-section h3,
+.markdown-section h4,
+.markdown-section h5,
+.markdown-section h6 {
+  color: #000 !important;
+  letter-spacing: -0.02em;
+}
+
+.markdown-section p {
+  color: #000 !important;
+  margin-bottom: 1.2em;
+}
+
+.markdown-section {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.chart-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+[data-gr-ext-installed], [data-new-gr-c-s-check-loaded] {
+}
+
+p, li, span {
+  letter-spacing: 0.01em;
+  word-spacing: 0.05em;
+}
+
+.text-content, .markdown-section p, .markdown-section li {
+  color: #000 !important;
+}
+
+/* Map specific styling to ensure full width */
+.rsm-svg {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.ComposableMap {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* Make the map container full width by removing constraints */
+div:has(> .rsm-svg) {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* Ensure the container of NomadMap is full width */
+.map-container {
+  width: 100% !important;
+  max-width: none !important;
+  padding: 0 !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Override any constraints on the visualization containers */
+.visualization-container {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* Smooth border for the map container */
+div[class*="w-full md:w-[95vw]"] {
+  border: 1px solid #e5e7eb !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  overflow: hidden !important;
+}
+
+/* Add specific styles for the map geography elements */
+.rsm-geography {
+  transition: fill 0.2s ease;
+}
+
+.rsm-geography:hover {
+  stroke: #e5e7eb !important;
+  stroke-width: 1.5 !important;
+}
+
+/* Adjust the legend position to not overlap with map elements */
+.map-legend-right {
+  right: 1rem !important;
+  max-width: 280px !important;
+  z-index: 10 !important;
+}
+
+/* Ensure proper header styling */
+.section-content h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  color: #000;
+}
+
+.section-content h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+  color: #2563eb;
+}
+
+/* Make sure we don't duplicate headers */
+.section-content h2:first-child {
+  display: none;
 }

@@ -10,6 +10,7 @@ import {
 } from 'react-simple-maps';
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
+import HydrationErrorSuppressor from './HydrationErrorSuppressor';
 
 // Adjust path to your JSON data
 import rawCitiesData from '../../csvjson.json';
@@ -497,295 +498,307 @@ const NomadMap: React.FC = () => {
   };
 
   return (
-    <div className="relative h-[700px] w-full border rounded-lg overflow-hidden bg-white">
-      <ComposableMap
-        projectionConfig={{ 
-          scale: 220,
-          center: [0, 10],
-          rotate: [0, 0, 0]
-        }}
-        style={{ 
-          width: '100%', 
-          height: '100%',
-          padding: 0,
-          margin: 0
-        }}
-        data-tooltip-id="nomad-tooltip"
-      >
-        <Geographies geography={GEO_URL}>
-          {({ geographies }: { geographies: GeographyType[] }) => (
-            geographies
-              .filter(geo => geo.properties.NAME !== 'Antarctica')
-              .map((geo) => {
-                const isOn = geo.properties.NAME === highlightCountry;
-                return (
-                  <Geography
-                    key={geo.rsmKey}
-                    geography={geo}
-                    fill={isOn ? '#9FE2BF' : '#E0E0E0'}
-                    stroke="#FFF"
-                    strokeWidth={0.5}
-                    style={{
-                      default: { outline: 'none' },
-                      hover:  { fill: '#C0C0C0', outline: 'none' },
-                    }}
-                  />
-                );
-              })
-          )}
-        </Geographies>
+    <HydrationErrorSuppressor>
+      <div className="w-full md:w-[95vw] max-w-none relative left-1/2 right-1/2 transform -translate-x-1/2 h-[700px] bg-white border rounded-lg overflow-hidden px-4 md:px-8 xl:px-12">
+        <div className="w-full h-full">
+          <ComposableMap
+            projectionConfig={{ 
+              scale: 230,
+              center: [40, 10],
+              rotate: [0, 0, 0]
+            }}
+            style={{ 
+              width: '100%',
+              height: '100%',
+              minWidth: '100vw',
+              minHeight: '700px',
+              maxWidth: '100vw',
+              display: 'block',
+            }}
+            data-tooltip-id="nomad-tooltip"
+            className="w-full h-full"
+          >
+            <Geographies geography={GEO_URL}>
+              {({ geographies }: { geographies: GeographyType[] }) => (
+                geographies
+                  .filter(geo => geo.properties.NAME !== 'Antarctica')
+                  .map((geo) => {
+                    const isOn = geo.properties.NAME === highlightCountry;
+                    return (
+                      <Geography
+                        key={geo.rsmKey}
+                        geography={geo}
+                        fill={isOn ? '#9FE2BF' : '#E0E0E0'}
+                        stroke="#FFF"
+                        strokeWidth={0.5}
+                        style={{
+                          default: { outline: 'none' },
+                          hover: { 
+                            fill: '#C0C0C0', 
+                            outline: 'none',
+                            stroke: '#e5e7eb', 
+                            strokeWidth: 1.5
+                          },
+                        }}
+                      />
+                    );
+                  })
+              )}
+            </Geographies>
 
-        {cities.map(city => renderMarker(city))}
-      </ComposableMap>
+            {cities.map(city => renderMarker(city))}
+          </ComposableMap>
+        </div>
 
-      {/* Dynamic Legend & Controls */}
-      <div className="absolute top-2 right-2 bg-white bg-opacity-95 p-3 rounded-lg text-sm text-black shadow-md max-w-xs">
-        <div className="font-semibold text-black mb-3 text-center">Visualization Controls</div>
-        
-        {/* Colorblind Mode Control */}
-        <div className="mb-3 border-b pb-2">
-          <div className="font-medium mb-1">Colorblind Mode:</div>
-          <select 
-            value={colorblindMode}
-            onChange={(e) => setColorblindMode(e.target.value as ColorblindMode)}
-            className="block w-full px-2 py-1 text-xs border border-gray-300 rounded bg-white"
-          >
-            <option value="none">Standard Colors</option>
-            <option value="deuteranopia">Deuteranopia (Red-Green)</option>
-            <option value="protanopia">Protanopia (Red-Green)</option>
-            <option value="tritanopia">Tritanopia (Blue-Yellow)</option>
-            <option value="monochromacy">Monochromacy (Grayscale)</option>
-          </select>
-        </div>
-        
-        {/* Size Control */}
-        <div className="mb-3 border-b pb-2">
-          <div className="font-medium mb-1">Circle Size by:</div>
-          <select 
-            value={sizeAttribute}
-            onChange={(e) => setSizeAttribute(e.target.value as AttributeKey)}
-            className="block w-full px-2 py-1 text-xs border border-gray-300 rounded bg-white"
-          >
-            <option value="nomad_score">Nomad Score</option>
-            <option value="internet_speed">Internet Speed</option>
-            <option value="cost_nomad">Cost of Living</option>
-            <option value="arbitrage_index">Arbitrage Index</option>
-            <option value="safety">Safety</option>
-            <option value="life_score">Life Quality</option>
-            <option value="friendly_to_foreigners">Foreigner Friendly</option>
-            <option value="freedom_score">Freedom Score</option>
-          </select>
-          <div className="flex items-center justify-between mt-1">
-            <div className="flex items-center">
-              <svg width="12" height="12"><circle cx="6" cy="6" r="3" fill="gray" /></svg>
-              <span className="ml-1 text-xs">Low</span>
-            </div>
-            <div className="flex items-center">
-              <svg width="20" height="20"><circle cx="10" cy="10" r="8" fill="gray" /></svg>
-              <span className="ml-1 text-xs">High</span>
-            </div>
+        {/* Dynamic Legend & Controls */}
+        <div className="absolute top-2 right-4 lg:right-6 bg-white bg-opacity-95 p-3 rounded-lg text-sm text-black shadow-md max-w-[280px]">
+          <div className="font-semibold text-black mb-3 text-center">Visualization Controls</div>
+          
+          {/* Colorblind Mode Control */}
+          <div className="mb-3 border-b pb-2">
+            <div className="font-medium mb-1">Colorblind Mode:</div>
+            <select 
+              value={colorblindMode}
+              onChange={(e) => setColorblindMode(e.target.value as ColorblindMode)}
+              className="block w-full px-2 py-1 text-xs border border-gray-300 rounded bg-white"
+            >
+              <option value="none">Standard Colors</option>
+              <option value="deuteranopia">Deuteranopia (Red-Green)</option>
+              <option value="protanopia">Protanopia (Red-Green)</option>
+              <option value="tritanopia">Tritanopia (Blue-Yellow)</option>
+              <option value="monochromacy">Monochromacy (Grayscale)</option>
+            </select>
           </div>
-        </div>
-        
-        {/* Color Control with Colorblind-Friendly Legend */}
-        <div className="mb-3 border-b pb-2">
-          <div className="font-medium mb-1">Circle Color by:</div>
-          <select 
-            value={colorAttribute}
-            onChange={(e) => setColorAttribute(e.target.value as AttributeKey)}
-            className="block w-full px-2 py-1 text-xs border border-gray-300 rounded bg-white"
-          >
-            <option value="arbitrage_index">Arbitrage Index</option>
-            <option value="cost_nomad">Cost of Living</option>
-            <option value="nomad_score">Nomad Score</option>
-            <option value="internet_speed">Internet Speed</option>
-            <option value="safety">Safety</option>
-            <option value="life_score">Life Quality</option>
-            <option value="friendly_to_foreigners">Foreigner Friendly</option>
-            <option value="freedom_score">Freedom Score</option>
-          </select>
-          <div className="h-3 w-full mt-1">
-            {colorAttribute === 'arbitrage_index' ? (
-              colorblindMode === 'deuteranopia' || colorblindMode === 'protanopia' ? (
-                <div className="h-full" style={{background: 'linear-gradient(to right, blue, lightblue, yellow)'}}></div>
-              ) : colorblindMode === 'tritanopia' ? (
-                <div className="h-full" style={{background: 'linear-gradient(to right, purple, white, orange)'}}></div>
-              ) : colorblindMode === 'monochromacy' ? (
-                <div className="h-full" style={{background: 'linear-gradient(to right, #333, #AAA, #FFF)'}}></div>
-              ) : (
-                <div className="h-full bg-gradient-to-r from-red-500 via-yellow-500 to-green-500 rounded"></div>
-              )
-            ) : colorAttribute === 'cost_nomad' ? (
-              colorblindMode === 'deuteranopia' || colorblindMode === 'protanopia' ? (
-                <div className="h-full" style={{background: 'linear-gradient(to right, blue, yellow)'}}></div>
-              ) : colorblindMode === 'tritanopia' ? (
-                <div className="h-full" style={{background: 'linear-gradient(to right, purple, orange)'}}></div>
-              ) : colorblindMode === 'monochromacy' ? (
-                <div className="h-full" style={{background: 'linear-gradient(to right, white, black)'}}></div>
-              ) : (
-                <div className="h-full bg-gradient-to-r from-green-500 to-red-500 rounded"></div>
-              )
-            ) : (
-              colorblindMode === 'deuteranopia' || colorblindMode === 'protanopia' ? (
-                <div className="h-full" style={{background: 'linear-gradient(to right, blue, yellow)'}}></div>
-              ) : colorblindMode === 'tritanopia' ? (
-                <div className="h-full" style={{background: 'linear-gradient(to right, purple, orange)'}}></div>
-              ) : colorblindMode === 'monochromacy' ? (
-                <div className="h-full" style={{background: 'linear-gradient(to right, black, white)'}}></div>
-              ) : (
-                <div className="h-full bg-gradient-to-r from-red-500 to-green-500 rounded"></div>
-              )
-            )}
-          </div>
-          <div className="flex justify-between text-xs">
-            {colorAttribute === 'arbitrage_index' ? (
-              <>
-                <span>{"< "+EXPENSIVE_THRESHOLD+"x"}</span>
-                <span>{EXPENSIVE_THRESHOLD+"–"+ARBITRAGE_THRESHOLD+"x"}</span>
-                <span>{"> "+ARBITRAGE_THRESHOLD+"x"}</span>
-              </>
-            ) : colorAttribute === 'cost_nomad' ? (
-              <>
-                <span>Lower</span>
-                <span>Higher</span>
-              </>
-            ) : (
-              <>
-                <span>Poor</span>
-                <span>Better</span>
-              </>
-            )}
-          </div>
-        </div>
-        
-        {/* Opacity Control */}
-        <div className="mb-2">
-          <div className="font-medium mb-1">Circle Opacity by:</div>
-          <select 
-            value={opacityAttribute}
-            onChange={(e) => setOpacityAttribute(e.target.value as AttributeKey)}
-            className="block w-full px-2 py-1 text-xs border border-gray-300 rounded bg-white"
-          >
-            <option value="internet_speed">Internet Speed</option>
-            <option value="nomad_score">Nomad Score</option>
-            <option value="cost_nomad">Cost of Living</option>
-            <option value="arbitrage_index">Arbitrage Index</option>
-            <option value="safety">Safety</option>
-            <option value="life_score">Life Quality</option>
-            <option value="friendly_to_foreigners">Foreigner Friendly</option>
-            <option value="freedom_score">Freedom Score</option>
-          </select>
-          <div className="h-3 w-full bg-gradient-to-r from-gray-100 to-gray-800 mt-1 rounded"></div>
-          <div className="flex justify-between text-xs">
-            <span>Transparent</span>
-            <span>Opaque</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Arbitrage Index Legend with Colorblind Adaptations */}
-      <div className="absolute bottom-2 left-2 bg-white bg-opacity-95 p-3 rounded-lg text-sm shadow-md">
-        <div className="font-semibold text-black mb-1">
-          Arbitrage Index
-          {colorblindMode !== 'none' && <span className="ml-2 text-xs bg-blue-100 px-1 py-0.5 rounded">Colorblind Mode: {colorblindMode}</span>}
-        </div>
-        <p className="text-xs mb-2 text-black">
-          How far a $3,000/mo US salary stretches
-          <span className="block mt-1 text-black">
-            Min: {arbitrageRange.min.toFixed(2)}x · Max: {arbitrageRange.max.toFixed(2)}x
-          </span>
-        </p>
-        
-        {colorblindMode === 'monochromacy' ? (
-          <>
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-4 h-4 rounded-full bg-gray-700 flex items-center justify-center">
-                <div className="w-1 h-1 rounded-full bg-white"></div>
+          
+          {/* Size Control */}
+          <div className="mb-3 border-b pb-2">
+            <div className="font-medium mb-1">Circle Size by:</div>
+            <select 
+              value={sizeAttribute}
+              onChange={(e) => setSizeAttribute(e.target.value as AttributeKey)}
+              className="block w-full px-2 py-1 text-xs border border-gray-300 rounded bg-white"
+            >
+              <option value="nomad_score">Nomad Score</option>
+              <option value="internet_speed">Internet Speed</option>
+              <option value="cost_nomad">Cost of Living</option>
+              <option value="arbitrage_index">Arbitrage Index</option>
+              <option value="safety">Safety</option>
+              <option value="life_score">Life Quality</option>
+              <option value="friendly_to_foreigners">Foreigner Friendly</option>
+              <option value="freedom_score">Freedom Score</option>
+            </select>
+            <div className="flex items-center justify-between mt-1">
+              <div className="flex items-center">
+                <svg width="12" height="12"><circle cx="6" cy="6" r="3" fill="gray" /></svg>
+                <span className="ml-1 text-xs">Low</span>
               </div>
-              <span className="text-xs text-black">&lt; {EXPENSIVE_THRESHOLD}x (Expensive)</span>
+              <div className="flex items-center">
+                <svg width="20" height="20"><circle cx="10" cy="10" r="8" fill="gray" /></svg>
+                <span className="ml-1 text-xs">High</span>
+              </div>
             </div>
-            <div className="flex items-center text-black gap-2 mb-1">
-              <div className="w-4 h-4 rounded-full bg-gray-400"></div>
-              <span className="text-xs text-black">{EXPENSIVE_THRESHOLD}–{ARBITRAGE_THRESHOLD}x (Breakeven)</span>
-            </div>
-            <div className="flex text-black items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-gray-100" style={{backgroundImage: 'linear-gradient(45deg, #999 25%, transparent 25%, transparent 50%, #999 50%, #999 75%, transparent 75%, transparent)', backgroundSize: '4px 4px'}}></div>
-              <span className="text-xs text-black">&gt; {ARBITRAGE_THRESHOLD}x (Arbitrage)</span>
-            </div>
-          </>
-        ) : colorblindMode === 'deuteranopia' || colorblindMode === 'protanopia' ? (
-          <>
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'blue' }}></div>
-              <span className="text-xs text-black">&lt; {EXPENSIVE_THRESHOLD}x (Expensive)</span>
-            </div>
-            <div className="flex items-center text-black gap-2 mb-1">
-              <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'lightblue' }}></div>
-              <span className="text-xs text-black">{EXPENSIVE_THRESHOLD}–{ARBITRAGE_THRESHOLD}x (Breakeven)</span>
-            </div>
-            <div className="flex text-black items-center gap-2">
-              <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'yellow' }}></div>
-              <span className="text-xs text-black">&gt; {ARBITRAGE_THRESHOLD}x (Arbitrage)</span>
-            </div>
-          </>
-        ) : colorblindMode === 'tritanopia' ? (
-          <>
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'purple' }}></div>
-              <span className="text-xs text-black">&lt; {EXPENSIVE_THRESHOLD}x (Expensive)</span>
-            </div>
-            <div className="flex items-center text-black gap-2 mb-1">
-              <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'white', border: '1px solid #ccc' }}></div>
-              <span className="text-xs text-black">{EXPENSIVE_THRESHOLD}–{ARBITRAGE_THRESHOLD}x (Breakeven)</span>
-            </div>
-            <div className="flex text-black items-center gap-2">
-              <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'orange' }}></div>
-              <span className="text-xs text-black">&gt; {ARBITRAGE_THRESHOLD}x (Arbitrage)</span>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'hsl(0, 90%, 50%)' }}></div>
-              <span className="text-xs text-black">&lt; {EXPENSIVE_THRESHOLD}x (Expensive)</span>
-            </div>
-            <div className="flex items-center text-black gap-2 mb-1">
-              <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'hsl(60, 90%, 50%)' }}></div>
-              <span className="text-xs text-black">{EXPENSIVE_THRESHOLD}–{ARBITRAGE_THRESHOLD}x (Breakeven)</span>
-            </div>
-            <div className="flex text-black items-center gap-2">
-              <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'hsl(120, 90%, 50%)' }}></div>
-              <span className="text-xs text-black">&gt; {ARBITRAGE_THRESHOLD}x (Arbitrage)</span>
-            </div>
-          </>
-        )}
-
-        {/* Help text for patterns in monochrome mode */}
-        {colorblindMode === 'monochromacy' && (
-          <div className="mt-2 text-xs text-gray-600">
-            <p>High-value areas also use patterns for better distinction</p>
           </div>
-        )}
-      </div>
+          
+          {/* Color Control with Colorblind-Friendly Legend */}
+          <div className="mb-3 border-b pb-2">
+            <div className="font-medium mb-1">Circle Color by:</div>
+            <select 
+              value={colorAttribute}
+              onChange={(e) => setColorAttribute(e.target.value as AttributeKey)}
+              className="block w-full px-2 py-1 text-xs border border-gray-300 rounded bg-white"
+            >
+              <option value="arbitrage_index">Arbitrage Index</option>
+              <option value="cost_nomad">Cost of Living</option>
+              <option value="nomad_score">Nomad Score</option>
+              <option value="internet_speed">Internet Speed</option>
+              <option value="safety">Safety</option>
+              <option value="life_score">Life Quality</option>
+              <option value="friendly_to_foreigners">Foreigner Friendly</option>
+              <option value="freedom_score">Freedom Score</option>
+            </select>
+            <div className="h-3 w-full mt-1">
+              {colorAttribute === 'arbitrage_index' ? (
+                colorblindMode === 'deuteranopia' || colorblindMode === 'protanopia' ? (
+                  <div className="h-full" style={{background: 'linear-gradient(to right, blue, lightblue, yellow)'}}></div>
+                ) : colorblindMode === 'tritanopia' ? (
+                  <div className="h-full" style={{background: 'linear-gradient(to right, purple, white, orange)'}}></div>
+                ) : colorblindMode === 'monochromacy' ? (
+                  <div className="h-full" style={{background: 'linear-gradient(to right, #333, #AAA, #FFF)'}}></div>
+                ) : (
+                  <div className="h-full bg-gradient-to-r from-red-500 via-yellow-500 to-green-500 rounded"></div>
+                )
+              ) : colorAttribute === 'cost_nomad' ? (
+                colorblindMode === 'deuteranopia' || colorblindMode === 'protanopia' ? (
+                  <div className="h-full" style={{background: 'linear-gradient(to right, blue, yellow)'}}></div>
+                ) : colorblindMode === 'tritanopia' ? (
+                  <div className="h-full" style={{background: 'linear-gradient(to right, purple, orange)'}}></div>
+                ) : colorblindMode === 'monochromacy' ? (
+                  <div className="h-full" style={{background: 'linear-gradient(to right, white, black)'}}></div>
+                ) : (
+                  <div className="h-full bg-gradient-to-r from-green-500 to-red-500 rounded"></div>
+                )
+              ) : (
+                colorblindMode === 'deuteranopia' || colorblindMode === 'protanopia' ? (
+                  <div className="h-full" style={{background: 'linear-gradient(to right, blue, yellow)'}}></div>
+                ) : colorblindMode === 'tritanopia' ? (
+                  <div className="h-full" style={{background: 'linear-gradient(to right, purple, orange)'}}></div>
+                ) : colorblindMode === 'monochromacy' ? (
+                  <div className="h-full" style={{background: 'linear-gradient(to right, black, white)'}}></div>
+                ) : (
+                  <div className="h-full bg-gradient-to-r from-red-500 to-green-500 rounded"></div>
+                )
+              )}
+            </div>
+            <div className="flex justify-between text-xs">
+              {colorAttribute === 'arbitrage_index' ? (
+                <>
+                  <span>{"< "+EXPENSIVE_THRESHOLD+"x"}</span>
+                  <span>{EXPENSIVE_THRESHOLD+"–"+ARBITRAGE_THRESHOLD+"x"}</span>
+                  <span>{"> "+ARBITRAGE_THRESHOLD+"x"}</span>
+                </>
+              ) : colorAttribute === 'cost_nomad' ? (
+                <>
+                  <span>Lower</span>
+                  <span>Higher</span>
+                </>
+              ) : (
+                <>
+                  <span>Poor</span>
+                  <span>Better</span>
+                </>
+              )}
+            </div>
+          </div>
+          
+          {/* Opacity Control */}
+          <div className="mb-2">
+            <div className="font-medium mb-1">Circle Opacity by:</div>
+            <select 
+              value={opacityAttribute}
+              onChange={(e) => setOpacityAttribute(e.target.value as AttributeKey)}
+              className="block w-full px-2 py-1 text-xs border border-gray-300 rounded bg-white"
+            >
+              <option value="internet_speed">Internet Speed</option>
+              <option value="nomad_score">Nomad Score</option>
+              <option value="cost_nomad">Cost of Living</option>
+              <option value="arbitrage_index">Arbitrage Index</option>
+              <option value="safety">Safety</option>
+              <option value="life_score">Life Quality</option>
+              <option value="friendly_to_foreigners">Foreigner Friendly</option>
+              <option value="freedom_score">Freedom Score</option>
+            </select>
+            <div className="h-3 w-full bg-gradient-to-r from-gray-100 to-gray-800 mt-1 rounded"></div>
+            <div className="flex justify-between text-xs">
+              <span>Transparent</span>
+              <span>Opaque</span>
+            </div>
+          </div>
+        </div>
 
-      {/* Tooltip */}
-      <Tooltip
-        id="nomad-tooltip"
-        html={tooltipHtml}
-        place="top"
-        noArrow
-        style={{
-          background: 'rgba(30,30,30,0.9)',
-          color: '#fff',
-          padding: '8px 12px',
-          borderRadius: '4px',
-          maxWidth: '240px',
-          lineHeight: 1.4,
-          fontSize: '0.9em',
-          zIndex: 1000
-        }}
-      />
-    </div>
+        {/* Arbitrage Index Legend with Colorblind Adaptations */}
+        <div className="absolute bottom-2 left-2 bg-white bg-opacity-95 p-3 rounded-lg text-sm shadow-md">
+          <div className="font-semibold text-black mb-1">
+            Arbitrage Index
+            {colorblindMode !== 'none' && <span className="ml-2 text-xs bg-blue-100 px-1 py-0.5 rounded">Colorblind Mode: {colorblindMode}</span>}
+          </div>
+          <p className="text-xs mb-2 text-black">
+            How far a $3,000/mo US salary stretches
+            <span className="block mt-1 text-black">
+              Min: {arbitrageRange.min.toFixed(2)}x · Max: {arbitrageRange.max.toFixed(2)}x
+            </span>
+          </p>
+          
+          {colorblindMode === 'monochromacy' ? (
+            <>
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-4 h-4 rounded-full bg-gray-700 flex items-center justify-center">
+                  <div className="w-1 h-1 rounded-full bg-white"></div>
+                </div>
+                <span className="text-xs text-black">&lt; {EXPENSIVE_THRESHOLD}x (Expensive)</span>
+              </div>
+              <div className="flex items-center text-black gap-2 mb-1">
+                <div className="w-4 h-4 rounded-full bg-gray-400"></div>
+                <span className="text-xs text-black">{EXPENSIVE_THRESHOLD}–{ARBITRAGE_THRESHOLD}x (Breakeven)</span>
+              </div>
+              <div className="flex text-black items-center gap-2">
+                <div className="w-4 h-4 rounded-full bg-gray-100" style={{backgroundImage: 'linear-gradient(45deg, #999 25%, transparent 25%, transparent 50%, #999 50%, #999 75%, transparent 75%, transparent)', backgroundSize: '4px 4px'}}></div>
+                <span className="text-xs text-black">&gt; {ARBITRAGE_THRESHOLD}x (Arbitrage)</span>
+              </div>
+            </>
+          ) : colorblindMode === 'deuteranopia' || colorblindMode === 'protanopia' ? (
+            <>
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'blue' }}></div>
+                <span className="text-xs text-black">&lt; {EXPENSIVE_THRESHOLD}x (Expensive)</span>
+              </div>
+              <div className="flex items-center text-black gap-2 mb-1">
+                <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'lightblue' }}></div>
+                <span className="text-xs text-black">{EXPENSIVE_THRESHOLD}–{ARBITRAGE_THRESHOLD}x (Breakeven)</span>
+              </div>
+              <div className="flex text-black items-center gap-2">
+                <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'yellow' }}></div>
+                <span className="text-xs text-black">&gt; {ARBITRAGE_THRESHOLD}x (Arbitrage)</span>
+              </div>
+            </>
+          ) : colorblindMode === 'tritanopia' ? (
+            <>
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'purple' }}></div>
+                <span className="text-xs text-black">&lt; {EXPENSIVE_THRESHOLD}x (Expensive)</span>
+              </div>
+              <div className="flex items-center text-black gap-2 mb-1">
+                <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'white', border: '1px solid #ccc' }}></div>
+                <span className="text-xs text-black">{EXPENSIVE_THRESHOLD}–{ARBITRAGE_THRESHOLD}x (Breakeven)</span>
+              </div>
+              <div className="flex text-black items-center gap-2">
+                <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'orange' }}></div>
+                <span className="text-xs text-black">&gt; {ARBITRAGE_THRESHOLD}x (Arbitrage)</span>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'hsl(0, 90%, 50%)' }}></div>
+                <span className="text-xs text-black">&lt; {EXPENSIVE_THRESHOLD}x (Expensive)</span>
+              </div>
+              <div className="flex items-center text-black gap-2 mb-1">
+                <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'hsl(60, 90%, 50%)' }}></div>
+                <span className="text-xs text-black">{EXPENSIVE_THRESHOLD}–{ARBITRAGE_THRESHOLD}x (Breakeven)</span>
+              </div>
+              <div className="flex text-black items-center gap-2">
+                <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'hsl(120, 90%, 50%)' }}></div>
+                <span className="text-xs text-black">&gt; {ARBITRAGE_THRESHOLD}x (Arbitrage)</span>
+              </div>
+            </>
+          )}
+
+          {/* Help text for patterns in monochrome mode */}
+          {colorblindMode === 'monochromacy' && (
+            <div className="mt-2 text-xs text-gray-600">
+              <p>High-value areas also use patterns for better distinction</p>
+            </div>
+          )}
+        </div>
+
+        {/* Tooltip */}
+        <Tooltip
+          id="nomad-tooltip"
+          html={tooltipHtml}
+          place="top"
+          noArrow
+          style={{
+            background: 'rgba(30,30,30,0.9)',
+            color: '#fff',
+            padding: '8px 12px',
+            borderRadius: '4px',
+            maxWidth: '240px',
+            lineHeight: 1.4,
+            fontSize: '0.9em',
+            zIndex: 1000
+          }}
+        />
+      </div>
+    </HydrationErrorSuppressor>
   );
 };
 

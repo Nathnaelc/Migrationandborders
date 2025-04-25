@@ -1,4 +1,7 @@
 declare module '*.csv' {
-  const content: any[];
+  interface CsvRow {
+    [key: string]: string | number | undefined;
+  }
+  const content: CsvRow[];
   export default content;
 }

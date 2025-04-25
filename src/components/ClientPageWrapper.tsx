@@ -1,68 +1,77 @@
 'use client';
 
-import dynamic from "next/dynamic";
+import { useState, useEffect } from 'react';
+import NomadMap from './NomadMap';
+import dynamic from 'next/dynamic';
+import { MarkdownContent } from '../utils/markdown';
 
-// Client-side dynamic imports
-const NomadMap = dynamic(() => import("./NomadMap"), { ssr: false });
-const LineChart = dynamic(() => import("./LineChart"), { ssr: false });
-const BarChartVisas = dynamic(() => import("./BarChartVisas"), { ssr: false });
-const BarChart = dynamic(() => import("./BarChart"), { ssr: false });
+
+const BarChartVisas = dynamic(() => import('./BarChartVisas'), { ssr: false });
+
+
+const renderComponent = (componentName: string) => {
+  switch (componentName) {
+    case 'NomadMap':
+      return <NomadMap />;
+    case 'BarChartVisas':
+      return <BarChartVisas />;
+    default:
+      return null;
+  }
+};
 
 export default function ClientPageWrapper() {
+  const [sections, setSections] = useState<MarkdownContent[]>([]);
+
+  useEffect(() => {
+    fetch('/api/sections')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setSections(data.sort((a: MarkdownContent, b: MarkdownContent) => a.order - b.order));
+        } else {
+          console.error('Expected array from /api/sections but got:', data);
+          setSections([]);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching sections:', error);
+        setSections([]);
+      });
+  }, []);
+
   return (
-    <>
-      {/* World Map Visualization */}
-      <section className="mb-12">
-        <div className="relative h-[850px] w-full border rounded-lg overflow-hidden p-6">
-            <h2 className="text-2xl text-black font-semibold mb-4">
-            Digital Nomad Destinations
-            </h2>
-            <p className="mb-4 text-gray-600">
-            Explore the world’s top remote-work hotspots:  
-            <strong>bubble size</strong> shows Nomad Score,  
-            <strong>bubble color</strong> shows average Internet Mbps,
-            Hover over any city to uncover safety, life-quality, and more.  
-            </p>
-            <div className="h-[700px] w-full">
-            <NomadMap />
-            </div>
+    <div className="container mx-auto px-2 py-8 max-w-7xl">
+      {/* Main Title */}
+      <div className="mb-8 text-center">
+        <h1 className="text-3xl font-semibold text-black mb-2">
+          Work Without Borders and the Global Inequality in the Digital Labor Economy
+        </h1>
+        <div className="text-gray-600">
+          <p>By Nathnael Mekonnen</p>
+          <p>April 24, 2025</p>
         </div>
-      </section>
-
-      {/* Nomad Visa Programs by Continent */}
-      <section className="mb-12">
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-semibold mb-4">Global Distribution of Nomad-Visa Programs</h2>
-          <p className="mb-4 text-gray-600">
-            This visualization reveals how digital nomad visa programs are distributed globally by continent. 
-            The data highlights significant disparities in mobility options between the Global North and South.
-          </p>
-          <BarChartVisas />
-        </div>
-      </section>
-
-      {/* City Metrics Comparison
-      <section className="mb-12">
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-semibold mb-4">City Metrics Comparison</h2>
-          <p className="mb-4 text-gray-600">
-            Compare key metrics across digital nomad destinations. The chart shows nomad scores, internet speed, and monthly costs.
-          </p>
-          <LineChart />
-        </div>
-      </section> */}
-
-      {/* Cost Comparison Bar Chart
-      <section className="mb-12">
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-semibold mb-4">Cost Comparison</h2>
-          <p className="mb-4 text-gray-600">
-            Compare monthly living costs for the top digital nomad destinations. This visualization helps you identify 
-            affordable options among the most desirable cities.
-          </p>
-          <BarChart />
-        </div>
-      </section> */}
-    </>
+      </div>
+      
+      <div className="space-y-8">
+        {/* Render sections with their components */}
+        {sections.map((section) => (
+          <div key={section.id} className="markdown-section">
+            {/* Display the section title as an H2 */}
+            <h2 className="text-2xl font-semibold mb-4 text-blue-600">{section.title}</h2>
+            
+            {/* Render the section content */}
+            <div className="section-content" dangerouslySetInnerHTML={{ __html: section.contentHtml }} />
+            
+            {/* Render the component that should come after this section */}
+            {section.insertComponentAfter && (
+              <div className="py-4 mt-8">
+                {renderComponent(section.insertComponentAfter)}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
