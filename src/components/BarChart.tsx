@@ -14,7 +14,7 @@ import {
   ChartOptions
 } from 'chart.js';
 import cities from '../data/processedNomadData';
-
+import Chart from 'chart.js/auto';
 
 ChartJS.register(
   CategoryScale,
