@@ -39,7 +39,7 @@ In this analysis I use a baseline salary of **$3,000/month** as a conservative m
 }
 </style>
 
-Higher index values (1.5x) identify cities where remote workers maximize their income potential, typically in locations combining low living costs with robust digital infrastructure. The visualization represents these values through **larger, greener circles** on the map, highlighting cities where nomads exercise disproportionate economic leverage.
+Higher index values **(+1.5x)** identify cities where remote workers maximize their income potential, typically in locations combining low living costs with robust digital infrastructure. The visualization represents these values through **larger, greener circles** on the map, highlighting cities where nomads exercise disproportionate economic leverage.
 
 Complementary metrics enhance this analysis, including **Nomad Score**, **Internet Speed**, **Safety**, **Life Quality**, and **Foreigner Friendliness**. These factors explain the gravitational pull of specific destinations. Cities like Lisbon and Chiang Mai consistently rank high across these categories, marking them as attractive yet increasingly pressured nomad hubs.
 
@@ -47,6 +47,6 @@ This economic advantage creates profound structural imbalances. The concentratio
 
 The map exposes systematic feedback loop. Cities with high arbitrage value draw high numbers of digital nomads -> their concentration drives housing costs upward -> these economic pressures force local residents from their neighborhoods -> and affected communities respond through organized protests and policy demands (Gill et al., 2022). This cycle repeats across popular nomad destinations, creating predictable waves of gentrification and resistance. Lisbon exemplifies this pattern, where Airbnb saturation has forced long-term residents from neighborhoods they can no longer afford (Matoušek, 2024).
 
-Understanding these dynamics enable us to see the patterns. The visualization identifies cities approaching stress points, reveals emerging conflict zones, and provides evidence for policymakers working to balance mobility rights with local equity. It challenges the widely promoted narrative that remote work democratizes opportunity, showing instead how it often deepens global divides without intentional management.
+Understanding these dynamics help us to see abstract patterns. The visualization identifies cities approaching stress points, reveals emerging conflict zones, and provides evidence for policymakers working to balance mobility rights with local equity. It challenges the widely promoted narrative that remote work democratizes opportunity, showing instead how it often deepens global divides without intentional management.
 
 The arbitrage aspect of the map below shows abstract economic concepts through geographic patterns, connecting individual decisions to systemic outcomes. It demonstrates how privileged mobility creates ripple effects across urban landscapes worldwide, affecting housing markets, local businesses, and community cohesion. This spatial analysis gives a foundation for more ethical approaches to global work that acknowledge power imbalances inherent in current nomadic practices.

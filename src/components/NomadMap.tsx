@@ -445,7 +445,7 @@ const NomadMap: React.FC<NomadMapProps> = ({ caption }) => {
 
   return (
     <HydrationErrorSuppressor>
-      <div className="w-full md:w-[95vw] h-[1000px] max-w-none relative left-1/2 right-1/2 transform -translate-x-1/2 mb-20">
+      <div className="w-full md:w-[95vw] h-[1080px] max-w-none relative left-1/2 right-1/2 transform -translate-x-1/2 mb-20">
         {/* Title */}
         <div className="pt-6 pb-2 text-center">
           <h2 className="text-2xl font-bold mb-1 text-gray-900">Global Digital Nomad City Map</h2>
@@ -654,7 +654,7 @@ const NomadMap: React.FC<NomadMapProps> = ({ caption }) => {
         </div>
 
         {/* Arbitrage Index Legend with Colorblind Adaptations */}
-        <div className="absolute bottom-2 left-2 bg-white bg-opacity-95 p-3 mb-20 rounded-lg text-sm shadow-md">
+        <div className="absolute bottom-2 left-2 bg-white bg-opacity-95 p-3 mb-40 rounded-lg text-sm shadow-md">
           <div className="font-semibold text-black mb-1">
             Arbitrage Index
             {colorblindMode !== 'none' && <span className="ml-2 text-xs bg-blue-100 px-1 py-0.5 rounded">Colorblind Mode: {colorblindMode}</span>}
@@ -755,8 +755,8 @@ const NomadMap: React.FC<NomadMapProps> = ({ caption }) => {
           }}
         />
         {/* Caption at the bottom */}
-        <div className="pt-6 pb-8 text-center text-gray-700 text-sm">
-          {caption || "This interactive map visualizes digital nomad cities worldwide, showing economic arbitrage, cost of living, and quality of life indicators. Hover over a city to see detailed metricsss."}
+        <div className="pt-6 pb-8 text-center text-gray-700 pl-25 pr-25 text-sm">
+          {caption || "Figure 1: This interactive map visualizes major digital nomad destinations worldwide, combining data on economic arbitrage, living costs, connectivity, and life quality. Circle size reflects the Arbitrage Index (calculated as median U.S. remote salary ÷ local nomad living cost); greener colors indicate greater purchasing power for remote workers. Hovering over a city reveals detailed metrics, including Nomad Score, Internet Speed, Safety, and Foreigner Friendliness. Data sources include the Global Digital Nomad Cities database (Hain, 2018) and supplementary migration infrastructure guides. This tool highlights not only ideal destinations for remote professionals but also urban ecosystems under growing socioeconomic pressure."}
         </div>
       </div>
     </HydrationErrorSuppressor>
