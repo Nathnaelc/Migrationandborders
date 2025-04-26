@@ -446,7 +446,7 @@ const NomadMap: React.FC<NomadMapProps> = ({ caption }) => {
 
   return (
     <HydrationErrorSuppressor>
-      <div className="w-full md:w-[95vw] h-[1080px] max-w-none relative left-1/2 right-1/2 transform -translate-x-1/2 mb-20">
+      <div className="w-full md:w-[95vw] h-[1110px] max-w-none relative left-1/2 right-1/2 transform -translate-x-1/2 mb-20">
         {/* Title */}
         <div className="pt-6 pb-2 text-center">
           <h2 className="text-2xl font-bold mb-1 text-gray-900">Global Digital Nomad City Map</h2>
@@ -509,7 +509,7 @@ const NomadMap: React.FC<NomadMapProps> = ({ caption }) => {
         )}
 
         {/* Dynamic Legend & Controls */}
-        <div className="absolute top-2 right-4 lg:right-2 bg-white bg-opacity-95 p-3 mt-28 rounded-lg text-sm text-black shadow-md max-w-[280px]">
+        <div className="absolute top-2 right-4 lg:right-2 bg-white bg-opacity-95 p-3 mt-35 rounded-lg text-sm text-black shadow-md max-w-[280px]">
           <div className="font-semibold text-black mb-3 text-center">Visualization Controls</div>
           
           {/* Colorblind Mode Control */}
