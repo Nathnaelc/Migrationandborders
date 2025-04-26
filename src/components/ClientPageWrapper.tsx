@@ -65,7 +65,7 @@ export default function ClientPageWrapper() {
           Work Without Borders and the Global Inequality in the Digital Labor Economy
         </h1>
         <div className="text-gray-600">
-          <p>By Nathnael Mekonnen</p>
+          <p>By <a className="text-emerald-700" href="https://nathnael.net" target='blank' >Nathnael Mekonnen</a></p>
           <p>April 24, 2025</p>
         </div>
       </div>
