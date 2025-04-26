@@ -501,7 +501,6 @@ const NomadMap: React.FC<NomadMapProps> = ({ caption }) => {
           </ComposableMap>
         </div>
 
-        {/* Move caption OUTSIDE the map container */}
         {caption && (
           <div className="mt-6 mb-10 text-center text-gray-700 text-sm max-w-3xl mx-auto">
             <p className="font-bold mb-1">Figure 3</p>
