@@ -149,7 +149,7 @@ p, li, span {
   color: #000 !important;
 }
 
-/* Map specific styling to ensure full width */
+
 .rsm-svg {
   width: 100% !important;
   max-width: none !important;
@@ -160,13 +160,12 @@ p, li, span {
   max-width: none !important;
 }
 
-/* Make the map container full width by removing constraints */
+
 div:has(> .rsm-svg) {
   width: 100% !important;
   max-width: none !important;
 }
 
-/* Ensure the container of NomadMap is full width */
 .map-container {
   width: 100% !important;
   max-width: none !important;
@@ -175,22 +174,19 @@ div:has(> .rsm-svg) {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
 }
 
-/* Override any constraints on the visualization containers */
 .visualization-container {
   width: 100% !important;
   max-width: none !important;
 }
 
-/* Smooth border for the map container */
 div[class*="w-full md:w-[95vw]"] {
-  border: 1px solid #e5e7eb !important; /* light gray */
+  border: 1px solid #e5e7eb !important;
   border-radius: 0.5rem !important;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
   overflow: hidden !important;
-  margin-bottom: 7rem !important; /* Add significant margin to ensure caption visibility */
+  margin-bottom: 7rem !important;
 }
 
-/* Add specific styles for the map geography elements */
 .rsm-geography {
   transition: fill 0.2s ease;
 }
@@ -200,14 +196,12 @@ div[class*="w-full md:w-[95vw]"] {
   stroke-width: 1.5 !important;
 }
 
-/* Adjust the legend position to not overlap with map elements */
 .map-legend-right {
   right: 1rem !important;
   max-width: 280px !important;
   z-index: 10 !important;
 }
 
-/* Ensure proper header styling */
 .section-content h2 {
   font-size: 1.75rem;
   font-weight: 600;
@@ -221,10 +215,9 @@ div[class*="w-full md:w-[95vw]"] {
   font-weight: 500;
   margin-top: 1.25rem;
   margin-bottom: 0.75rem;
-  color: #2563eb;
+  color: #010f2b;
 }
 
-/* Make sure we don't duplicate headers */
 .section-content h2:first-child {
   display: none;
 }
@@ -239,7 +232,6 @@ div[class*="w-full md:w-[95vw]"] {
   transition: all 0.1s ease;
 }
 
-/* Chart.js needs proper canvas rendering */
 .chartjs-render-monitor {
   animation: chartjs-render-animation 0.001s;
 }
@@ -249,7 +241,6 @@ div[class*="w-full md:w-[95vw]"] {
   100% { opacity: 1; }
 }
 
-/* Chart container for proper dimensions */
 .chart-container {
   position: relative;
   height: 400px;
@@ -264,7 +255,7 @@ div[class*="w-full md:w-[95vw]"] {
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
-  height: 700px !important; /* Reduced from 750px */
+  height: 700px !important;
 }
 
 .component-caption {
@@ -292,9 +283,6 @@ div:has(> .chart-container) {
   margin-top: 2rem !important;
 }
 
-/* Add these specific styles to fix chart and section overlapping */
-
-/* Make sure section 5 doesn't overlap with previous content */
 .markdown-section:nth-child(5) {
   margin-top: 4rem !important;
   padding-top: 2rem !important;

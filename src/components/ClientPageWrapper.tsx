@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import NomadMap from './NomadMap';
+import MapCaption from './MapCaption';
 import dynamic from 'next/dynamic';
 import { MarkdownContent } from '../utils/markdown';
 import ChartErrorBoundary from './ChartErrorBoundary';
@@ -13,12 +14,12 @@ const renderComponent = (componentName: string, section: MarkdownContent) => {
     case 'NomadMap':
       return (
         <div className="mb-16"> 
-          <NomadMap caption={section.mapCaption} />
+          <NomadMap /> 
         </div>
       );
     case 'BarChartVisas':
       return (
-        <div className="py-4 w-full max-w-5xl mx-auto mb-16 h-[1060px] overflow-hidden"> 
+        <div className="py-4 w-full max-w-5xl mx-auto mb-16 h-[1160px] overflow-hidden"> 
           <ChartErrorBoundary>
             <div className="chart-container">
               <BarChartVisas />

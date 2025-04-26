@@ -610,6 +610,10 @@ const BarChartVisas = () => {
             ))}
           </div>
         </motion.div>
+        <div className="text-sm text-gray-500 mt-2">
+        <strong>Figure 2</strong>: Wage Disparities between Digital Nomads and Local Workers (Khalid, 2023)
+        This chart compares typical monthly digital nomad earnings (set at $3,000) to local median wages in selected cities. Higher bars indicate significant income disparities, pinpointing communities facing intense socioeconomic pressures from digital nomad influxes.
+        </div>
       </div>
     </motion.div>
   );
