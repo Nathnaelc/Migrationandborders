@@ -72,7 +72,11 @@ export default function ClientPageWrapper() {
       
       <div className="space-y-8"> 
         {sections.map((section) => (
-          <div key={section.id} className="markdown-section mb-8"> 
+          <div 
+            key={section.id} 
+            className="markdown-section mb-8"
+            data-section-id={section.id}
+          > 
             <h2 className="text-2xl font-semibold mb-4 text-blue-600">{section.title}</h2>
         
             <div className="section-content" dangerouslySetInnerHTML={{ __html: section.contentHtml }} />

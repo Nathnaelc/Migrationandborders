@@ -30,11 +30,28 @@ body {
 }
 
 .markdown-section h2 {
-  @apply text-2xl font-semibold mb-4 text-blue-600 mt-8;
+  @apply text-2xl font-semibold mb-4 mt-8;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: #17446d;
+  border-bottom: 0.5px solid #cee5fa;
+  padding-bottom: 0.5rem;
+  display: inline-block;
 }
 
 .markdown-section h3 {
-  @apply text-xl font-medium mb-3 text-blue-500 mt-6;
+  @apply text-xl font-medium mb-3 mt-6;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #122840;
+  font-style: italic;
+  border-left: 1.2px solid #003165;
+  padding-left: 0.75rem;
+  position: relative;
 }
 
 .markdown-section p {
@@ -208,14 +225,37 @@ div[class*="w-full md:w-[95vw]"] {
   margin-top: 1.5rem;
   margin-bottom: 1rem;
   color: #000;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: #102a43;
+  border-bottom: 2px solid #3182ce;
+  padding-bottom: 0.5rem;
+  display: inline-block;
 }
 
 .section-content h3 {
-  font-size: 1.5rem;
-  font-weight: 500;
-  margin-top: 1.25rem;
-  margin-bottom: 0.75rem;
-  color: #010f2b;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #2b6cb0;
+  font-style: italic;
+  border-left: 2px solid #617b96;
+  padding-left: 0.75rem;
+  position: relative;
+}
+
+.section-content h3::before {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: #2b6cb0;
 }
 
 .section-content h2:first-child {
@@ -277,16 +317,16 @@ div[class*="w-full md:w-[95vw]"] {
 div:has(> .chart-container) {
   margin-bottom: 6rem !important;
   padding-bottom: 2rem !important;
-  display: block !important;
-  clear: both !important;
-  overflow: auto !important;
-  margin-top: 2rem !important;
-}
+  display: block !important;  clear: both !important;  overflow: auto !important;  margin-top: 2rem !important;}
 
 .markdown-section:nth-child(5) {
   margin-top: 4rem !important;
   padding-top: 2rem !important;
   border-top: 1px solid #eee;
+}
+
+.markdown-section[data-section-id="section-5"] h3 {
+  /* Any section-5 specific overrides could go here */
 }
 
 
